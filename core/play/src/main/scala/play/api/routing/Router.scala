@@ -13,6 +13,8 @@ import play.api.routing.Router.Routes
 import play.core.j.JavaRouterAdapter
 import play.utils.Reflect
 
+import scala.collection.immutable.ListMap
+
 /**
  * A router.
  */
@@ -124,6 +126,8 @@ object Router {
      * Key for the [[HandlerDef]] used to handle the request.
      */
     val HandlerDef: TypedKey[HandlerDef] = TypedKey("HandlerDef")
+
+    val PathParams: TypedKey[ListMap[String, Any]] = TypedKey("PathParams")
   }
 
   /**

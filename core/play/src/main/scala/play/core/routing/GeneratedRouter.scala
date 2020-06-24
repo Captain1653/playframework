@@ -12,6 +12,7 @@ import play.api.routing.HandlerDef
 import play.api.routing.Router
 
 import scala.collection.JavaConverters._
+import scala.collection.immutable.ListMap
 
 /**
  * A route
@@ -484,6 +485,18 @@ a1 <- pa1.value.right
     new HandlerInvoker[T] {
       override def call(call: => T): Handler = {
         val nextHandler = underlyingInvoker.call(call)
+        Handler.Stage.modifyRequest(modifyRequestFunc, nextHandler)
+      }
+    }
+  }
+
+  def attachPathParams[T](next: HandlerInvoker[T], pathParams: ListMap[String, Any]): HandlerInvoker[T] = {
+    val modifyRequestFunc: RequestHeader => RequestHeader = { rh: RequestHeader =>
+      rh.addAttr(play.api.routing.Router.Attrs.PathParams, pathParams)
+    }
+    new HandlerInvoker[T] {
+      override def call(call: => T): Handler = {
+        val nextHandler = next.call(call)
         Handler.Stage.modifyRequest(modifyRequestFunc, nextHandler)
       }
     }

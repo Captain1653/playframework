@@ -13,6 +13,7 @@ import play.api.routing.HandlerDef;
 import play.api.routing.SimpleRouter$;
 import play.libs.typedmap.TypedKey;
 import play.mvc.Http.RequestHeader;
+import scala.collection.immutable.ListMap;
 
 /** The Java Router API */
 public interface Router {
@@ -53,6 +54,9 @@ public interface Router {
     /** Key for the {@link HandlerDef} used to handle the request. */
     public static final TypedKey<HandlerDef> HANDLER_DEF =
         new TypedKey<>(play.api.routing.Router.Attrs$.MODULE$.HandlerDef());
+
+    public static final TypedKey<ListMap<String, Object>> PATH_PARAMS =
+        new TypedKey<>(play.api.routing.Router.Attrs$.MODULE$.PathParams());
   }
 
   class RouteDocumentation {

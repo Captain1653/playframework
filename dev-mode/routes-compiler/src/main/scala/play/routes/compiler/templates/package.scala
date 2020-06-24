@@ -138,6 +138,20 @@ package object templates {
     else listNames(route)
 
   /**
+   * Split route params in map
+   */
+  def splitRouteParams(route: Route): String = {
+    route.call.parameters
+      .filterNot(_.isEmpty)
+      .map { params =>
+        params.filterNot(_.isJavaRequest).map(x => safeKeyword(x.name)).map(x => s""" "$x" -> $x """.trim).mkString(", ")
+      }
+      .filterNot(_.isEmpty)
+      .map("scala.collection.immutable.ListMap(" + _ + ")")
+      .getOrElse("scala.collection.immutable.ListMap()")
+  }
+
+  /**
    * The code to statically get the Play injector
    */
   val Injector =
